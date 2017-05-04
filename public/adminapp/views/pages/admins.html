@@ -1,0 +1,149 @@
+<div class="pageBody">
+	<br>
+	<div ng-controller="ProfileController as proCtrl">
+		
+
+		<ul class="user-profiles-list-basic">
+
+			<li ng-repeat="admin in proCtrl.admins">
+				<a href="/admin/{{admin._id}}" class="user-avatar">
+					<img ng-if="admin.imgURL" src="{{admin.imgURL}}" width="80" alt="Profile of {{admin.name}}" />
+					
+					<img ng-if="!admin.imgURL" src="https://image.freepik.com/free-icon/user-male-shape-in-a-circle-ios-7-interface-symbol_318-35357.jpg" width="80" alt="Profile of {{admin.name}}" />
+				</a>
+
+				<p>
+					<a href="/admin/{{admin._id}}">{{admin.name}}</a>
+					<span><i>{{admin.email}}</i></span>
+					<span><i>{{admin.mobile}}</i></span>
+				</p>
+
+				<a ng-if="admin.accountStatus=='active'" class="disable" href="#"><i class="fa fa-close"></i></a>
+				<a ng-if="admin.accountStatus!='active'" class="enable" href="#"><i class="fa fa-close"></i></a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+
+<style>
+	
+	.pageBody{
+		margin-top: 38px;
+		background-color: #fafafa;
+		padding-left: 9%;
+		padding-right: 9%;
+	}
+
+	.user-profiles-list-basic{
+		line-height: 1;
+		list-style:none;
+		text-align: center;
+		margin:0;
+		padding:0;
+	}
+
+	.user-profiles-list-basic li{
+		display: inline-block;
+		box-sizing:border-box;
+		position: relative;
+
+		text-align:left;
+		font:normal 16px sans-serif;
+		padding: 12px;
+		margin: 12px;
+
+		background-color:#f4f8fa;
+		border:1px solid #dbe3e7;
+		box-shadow: 0 2px 3px #dbe3e7;
+	}
+
+	.user-profiles-list-basic .user-avatar{
+		float: left;
+		width:100px;
+		text-align: left;
+	}
+
+	.user-profiles-list-basic .user-avatar img{
+		border-radius: 50%;
+		border:0;
+	}
+
+	.user-profiles-list-basic p{
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow:ellipsis;
+		text-align: left;
+		margin-top: 20px;
+		max-width:340px;
+	}
+
+	.user-profiles-list-basic p a{
+		color:#5d6569;
+		text-decoration: none;
+		font-weight:bold;
+		font-size:18px;
+	}
+
+	.user-profiles-list-basic p span{
+		display: block;
+		font-size: 13px;
+		color:#808d93;
+		padding-top:4px;
+	}
+
+	.user-profiles-list-basic .enable{
+		background-color:#de4a4a;
+		border-radius: 50%;
+		color:#fff;
+		font-size:13px;
+		line-height: 22px;
+		width:22px;
+		height: 22px;
+		position: absolute;
+		top:-10px;
+		right:-10px;
+		text-align: center;
+		text-decoration: none;
+
+	}
+	.user-profiles-list-basic .disable{
+		background-color:green;
+		border-radius: 50%;
+		color:#fff;
+		font-size:13px;
+		line-height: 22px;
+		width:22px;
+		height: 22px;
+		position: absolute;
+		top:-10px;
+		right:-10px;
+		text-align: center;
+		text-decoration: none;
+
+	}
+
+	/* Making the list responsive */
+
+	@media (max-width: 400px) {
+
+		.user-profiles-list-basic li{
+			margin: 10px 0;
+		}
+
+
+		.user-profiles-list-basic .enable{
+			top: 10px;
+			right: 10px;
+		}
+		.user-profiles-list-basic .disable{
+			top: 10px;
+			right: 10px;
+		}
+
+	}
+
+
+
+</style>

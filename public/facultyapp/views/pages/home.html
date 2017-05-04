@@ -1,0 +1,199 @@
+<style>
+
+
+	html, body { height: 100%; width: 100%; margin: 0; }
+	body {
+		overflow: hidden;
+	}
+	.chatbody{
+		width: 100%;
+		padding-top: 55px;
+	}
+	.content: {
+		height: 100vh;
+	}
+	.groups{
+		height: 100vh;
+		position: relative;
+	}
+	.groupsandpersonal{
+		text-align: center;
+		padding: 5%;
+		color: white;
+		position: relative;
+		background-color: #20BF9F;
+		height: 100%;
+		overflow-y: scroll;
+	}
+	.chats{
+		height: 100vh;
+		overflow:   auto;
+		position: relative;
+		/*border: 1px solid #ccc;
+		*/
+
+	}
+	.chatsmessages{
+		overflow-y: scroll;
+	}
+	#style-4::-webkit-scrollbar-track
+	{
+		background-color: none;
+	}
+
+
+	#style-4::-webkit-scrollbar
+	{
+		width: 5px;
+		background-color: none;
+	}
+
+
+	#style-4::-webkit-scrollbar-thumb
+	{
+		background-color: #D0D0D0 	;
+		border-radius: 10px;
+	}
+	.sendmessage{
+		width: 55%;
+		bottom: 0;
+		position: fixed;
+		padding: 10px;
+		background-color: #d0d0d0;
+	}
+	.list > a > p{
+		margin: 0;
+		padding: 0;
+	}
+	.nodecoration{
+		color: white;
+		text-decoration: none;
+	}
+	.nodecoration:hover, .nodecoration:visited, .nodecoration:link{
+		text-decoration: none;
+		color: white;
+	}
+	.yesdecoration:hover, .yesdecoration:visited, .yesdecoration:link{
+		color: white;
+		text-decoration: none;
+	}
+	.yesdecoration{
+		background-color: purple;
+		border-radius: 50px;
+	}
+	.userimage{
+		height: 50px;
+		width: 50px;
+	}
+</style>
+
+<div class="chatbody" ng-controller="UserChatController as chatCtrl">
+
+	<div class="row content">
+		<div class="col-sm-2 groups">
+			<div class="groupsandpersonal" id="style-4">
+				<h3>Projects</h3>
+				<div class="list" ng-repeat="chat in chatCtrl.chats">
+					<a href="" class="nodecoration" ng-if="chat.name" ng-click="chatCtrl.getChat(chat._id)"><p>{{chat.name}}</p></a>
+					<!-- <a href="" class="yesdecoration"><p class="yesdecoration">Teamconnect</p></a> -->
+				</div>
+
+
+				<br>
+				<h3>Private</h3>
+				<div class="list" ng-repeat="chat in chatCtrl.chats">
+					<a href="" class="nodecoration" ng-if="!chat.name" ng-click="chatCtrl.getChat(chat._id)"><p>{{chat.name}}</p></a>
+					<!-- <a href="" class="yesdecoration"><p class="yesdecoration">Teamconnect</p></a> -->
+				</div>
+			</div>
+			
+		</div>
+		<div class="col-sm-7 chats" ng-if="chatCtrl.selectedChat">
+			<div class="chatsmessages row" id="style-4" ng-repeat="message in chatCtrl.selectedChat.messages | orderBy:'created_at'">
+				<div class="col-sm-1">
+					<img ng-if="message.sender.imgURL" src="{{message.sender.imgURL}}" class="userimage">
+					<img ng-if="!message.sender.imgURL" src="https://thumbs.dreamstime.com/z/cartoon-professor-vector-illustration-30463505.jpg" class="userimage">
+				</div>
+				<div class="col-sm-11">
+					<b>{{message.sender.name}}</b>, {{message.created_at | amDateFormat: 'h:mm a , MMMM Do YYYY'}}
+					<br>
+					{{message.message}}
+				</div>
+			</div>
+			<br>
+			<br><br><br><br><br>
+			<div class="sendmessage">
+				<div class="input-group inputformessage">
+					<input type="text" class="form-control" placeholder="Type your message here" ng-model="chatCtrl.newMessage">
+					<span class="input-group-btn"><button class="btn btn btn-success" ng-click="chatCtrl.sendMessage()">Send</button></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3" ng-if="chatCtrl.selectedChat">
+			<div ng-if="chatCtrl.selectedChat.project">
+				<h5>{{chatCtrl.selectedChat.project.title}}</h5>
+				<p>{{chatCtrl.selectedChat.project.description}}</p>
+			</div>		
+			<a class="btn btn-primary" data-toggle="collapse" href="" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				Invite
+			</a>
+			<div class="collapse" id="collapseExample">
+				<div class="card card-block"  style="padding: 2%;">
+					<form>
+						<fieldset class="form-group">
+							<div class="form-check form-check-inline">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" ng-model="chatCtrl.inviteData.role"  id="inlineCheckbox1" value="student"> student
+								</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" ng-model="chatCtrl.inviteData.role"  id="inlineCheckbox2" value="faculty"> faculty
+								</label>
+							</div>
+						</fieldset>
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" placeholder="email" ng-model="chatCtrl.inviteData.email">
+							<span class="input-group-addon" id="basic-addon2" ng-click="chatCtrl.sendInvite(chatCtrl.selectedChat.project._id ,chatCtrl.selectedChat._id)" style="cursor: pointer">Send</span>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- <div>
+				<button class="btn" data-toggle="collapse" data-target="#shcedule" aria-expanded="false" aria-controls="collapseExample">Schedule Appointment</button>
+				<br>
+				<div class="collapse" id="shcedule">
+					<div class="card card-block">
+						<input type="text" class="form-control" placeholder="Title" ng-model="chatCtrl.appointmentData.title">
+						<input class="form-control" type="datetime-local" ng-model="chatCtrl.appointmentData.schedule">
+						<button class="btn btn-primary" ng-click="chatCtrl.scheduleAppointment(chatCtrl.selectedChat.project._id)">Schedule</button>
+					</div>
+				</div>
+			</div> -->
+			<div ng-repeat="appointment in chatCtrl.selectedChat.appointmentData">
+				{{appointment.title}}
+				<br>
+				<div ng-if="!appointment.status">
+					<button class="btn btn-sm" ng-if="appointment.updated_by!='faculty'" ng-click="chatCtrl.approveAppointment(appointment._id)">Accept</button>
+					<br>
+					<button class="btn btn-sm" data-toggle="collapse" data-target="#reshcedule" aria-expanded="false" aria-controls="collapseExample" ng-if="appointment.updated_by!='faculty'">Reschedule Appointment</button>	
+					<br>
+					<div class="collapse" id="reshcedule">
+						<div class="card card-block">
+							<input class="form-control" type="datetime-local" ng-model="chatCtrl.newschedule">
+							<button class="btn btn-primary" ng-click="chatCtrl.rescheduleAppointment(appointment._id)">ReSchedule</button>
+						</div>
+					</div>			
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-10 chats" ng-if="!chatCtrl.selectedChat">
+			Welcome!
+		</div>
+	</div>
+
+</div>
+<!-- 
+<script type="text/javascript">
+	$('#chatmessages').scrollTop($('#chatmessages')[0].scrollHeight);
+</script> -->

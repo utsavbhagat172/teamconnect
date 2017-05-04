@@ -1,0 +1,75 @@
+<div class="adminhome">
+	<div class="sectionHeadingOuter">
+		<h3 class="sectionHeading">Welcome</h3><br><br>
+	</div>
+
+	<div class="row grid">
+		<a href="/students">
+			<div class="col-sm-6 white">
+				<img src="http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" class="img-fluid">
+				<br>
+				Students
+			</div>
+		</a>	
+		<a href="/faculties">
+			<div class="col-sm-6 white">
+				<img src="http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" class="img-fluid">
+				<br>
+				Faculties
+			</div>
+		</a>
+<!-- 		<a href="/admins">
+			<div class="col-sm-4 white">
+				<img src="http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" class="img-fluid">
+				<br>
+				Admins
+			</div>
+		</a> -->
+	</div>
+	
+</div>
+
+
+
+<style>
+
+	.adminhome{
+		padding: 5%;
+		padding-right: 10%;
+		padding-left: 10%;
+		background-color: #f5f5f5;
+	}
+	.grid{
+		text-align: center;
+	}
+	.white{
+		background-color: white;
+		border:5px solid #f5f5f5;
+		padding: 2%
+	}
+	.white > img{
+		height: 150px;
+		width: 150px;
+	}
+
+	.sectionHeadingOuter{
+		text-align: center;
+	}
+	.sectionHeading {
+		font-weight: 300;
+		display: inline-block;
+		padding-bottom: 5px;
+		position: relative;
+		color: grey;
+		margin: 0 auto;
+	}
+	.sectionHeading:before{
+		content: "";
+		position: absolute;
+		width: 64%;
+		height: 1px;
+		bottom: 0;
+		left: 0%;
+		border-bottom: 2px solid #6699cc;
+	}
+</style>

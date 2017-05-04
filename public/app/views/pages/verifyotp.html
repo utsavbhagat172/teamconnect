@@ -1,0 +1,17 @@
+<div ng-controller="UserCreateController as userCtrl">
+	Your OTP has been sent at {{userCtrl.mobile}}
+
+	<br><br>
+
+	Please enter the OTP
+
+	<br><br>
+
+	<input type="number" name="OTP" model="userCtrl.otp" placeholder="OTP">
+
+	<br>
+	<br>
+
+	<button class="btn btn-sm" ng-click="userCtrl.resendotp()">RESEND</button><br><br>
+	<button class="btn btn-sm" ng-click="userCtrl.verifyotp()">VERIFY</button>
+</div>

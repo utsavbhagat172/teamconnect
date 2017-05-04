@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html ng-app="FacultyApp">
+<head>
+	<base href='/'>
+	<title>TeamConnect</title>
+
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script>
+
+
+	<!-- Services -->
+	<script type="text/javascript" src="/services/authService.js"></script>
+	<script type="text/javascript" src="/services/userService.js"></script>
+	<script type="text/javascript" src="/services/questionService.js"></script>
+	<script type="text/javascript" src="/services/chatService.js"></script>
+
+	<!-- Controllers -->
+	<script type="text/javascript" src="/controllers/mainCtrl.js"></script>
+	<script type="text/javascript" src="/controllers/userCtrl.js"></script>
+	<script type="text/javascript" src="/controllers/questionCtrl.js"></script>
+	<script type="text/javascript" src="/controllers/chatCtrl.js"></script>
+
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="/elements/style/style.css">
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.0.1/angular-moment.min.js"></script>
+
+
+	<script type="text/javascript" src="/app.routes.js"></script>
+	<script type="text/javascript" src="/app.js"></script>
+
+</head>
+<body ng-controller="MainController as main">
+
+	<nav class="navbar navbar-toggleable-md fixed-top navbar-light bg-faded">
+		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand" href="#">TeamConnect</a>
+		<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item" ng-if="!main.loggedIn">
+					<a class="nav-link" href="/login">Login</a>
+				</li>
+				<li class="nav-item" ng-if="main.loggedIn">
+					<a class="nav-link" href="/profile">{{ main.user.name }}</a>
+				</li>
+				<li class="nav-item" ng-if="main.loggedIn">
+					<a class="nav-link" href="#" ng-click="main.doLogout()">Logout</a>
+				</li>
+			</ul> 
+		</div>
+	</nav>
+
+
+
+
+		<div ng-view></div>
+	
+			<footer>
+
+		<div class="row footerlinks">
+			<div class="col-sm-3">
+				<h3>TeamConnect.</h3>
+			</div>
+			<div class="col-sm-6">
+				<div class="row footer">
+					<div class="col-sm-3">
+						About Us
+					</div>
+					<div class="col-sm-3">
+						Contact Us
+					</div>
+					<div class="col-sm-3">
+						Forum
+					</div>
+					<div class="col-sm-3">
+						Experts
+					</div>
+				</div>		
+			</div>
+			<div class="col-sm-3">
+				<div class="row">
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid">
+					</div>
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid">
+					</div>
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid">
+					</div>
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid"> 
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<hr class="footer-hr">
+		<br><br>
+		<div class="row">
+			<div class="col-sm-6">
+				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+			</div>
+			<div class="col-sm-2">
+
+			</div>
+			<div class="col-sm-2">
+				Privacy Policy
+			</div>
+			<div class="col-sm-2">
+				Terms and Conditions
+			</div>
+		</div>	
+
+	</footer>
+	
+	<!-- jQuery first, then Tether, then Bootstrap JS. -->
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</body>
+</html>

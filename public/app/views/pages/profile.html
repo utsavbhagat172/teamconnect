@@ -1,0 +1,180 @@
+<div class="profileBody">
+
+
+    <div class="row" ng-controller="UserUpdateController as userCtrl">
+        <div class="col-sm-2 listing">
+            <div style="font-size: 14px">
+                <h6 class="sectionHeading">{{main.user.name}}</h6><br>
+                <a ng-click="userCtrl.display='info'" href="" class="profileview">
+                    <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" width="20" height="20" class="d-inline-block align-top" alt=""> Personal Info
+                </a>
+                <br><br>
+                <a ng-click="userCtrl.display='invitations'" href="" class="profileview">
+                    <img src="https://cdn3.iconfinder.com/data/icons/interface/100/help_question-512.png" width="20" height="20" class="d-inline-block align-top" alt=""> Invitations
+                </a>
+            </div>
+        </div>
+
+        <div class="col-sm-10">
+            <div class="box" ng-if="userCtrl.display=='info'">
+
+                <!-- Tab panes -->
+                <div>
+                <div class="box-content" id="Signup" ng-init="userCtrl.userData=main.user" ng-if="!userCtrl.processing">
+
+                        <h3>Update Your Profile</h3><br>
+                        <img src="{{userCtrl.userData.imgURL}}" class="img-circle">
+                        <br>
+                        <form enctype="multipart/form-data" class="form-sigin" ng-submit="userCtrl.updateProfilePicture()">
+                            <input type="file" name="file" file-model = "userCtrl.newFile" class="form-control">
+                            <button type="submit" class="btn btn-sm">Update Profile Picture</button>
+                        </form>
+                        <br>
+                        <form>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+
+                                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Name" ng-model="userCtrl.userData.name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Mobile Number" ng-model="userCtrl.userData.mobile" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="form-group">
+
+                                        <input type="email" class="form-control" id="formGroupExampleInput2" placeholder="Email" ng-model="userCtrl.userData.email" disabled>
+                                    </div>
+                                </div>  
+                            </div>
+
+                            <br>
+                            <button class="btn btn-info buttonsignin" ng-click="userCtrl.updateUser()">Update</button><br>
+                        </form>
+
+                    </div>
+                    <div ng-if="userCtrl.processing">
+                        <img src="../icons/consulto-icons/ring.gif">
+                    </div>
+                </div>
+            </div>
+            <div ng-if="userCtrl.display=='invitations'" class="invitations" ng-init="main.getInvitations()">
+                <div ng-repeat="invitation in main.invitations">
+                    <div ng-if="invitation.role=='faculty'" >
+
+                        You have been invited as a <b>faculty</b> member by {{invitation.created_by}} for the <i>"{{invitation.project.title}}"</i> project. 
+                        <br>
+                        <i>{{invitation.created_at | amDateFormat : 'D MMMM, YYYY,  hh:mm a'}}
+                        </i><br>
+                        Status: <b>{{invitation.status}}</b>
+                        <br>
+                        <button class="btn btn-success" ng-if="invitation.status=='invited'" ng-click="main.acceptInvitation(invitation)">Accept</button>
+                        <button class="btn btn-warn" ng-if="invitation.status=='invited'" ng-click="main.rejectInvitation(invitation)">Reject</button>
+                    </div>
+                    <div ng-if="invitation.role=='student'" >
+
+                        You have been invited as a <b>student</b> member by {{invitation.created_by}} for the <i>"{{invitation.project.title}}"</i> project. 
+                        <br>
+                        <i>{{invitation.created_at | amDateFormat : 'D MMMM, YYYY,  hh:mm a'}}
+                        </i><br>
+                        Status: <b>{{invitation.status}}</b>
+                        <br>
+                        <button class="btn btn-success" ng-if="invitation.status=='invited'" ng-click="main.acceptInvitation(invitation)">Accept</button>
+                        <button class="btn btn-warn" ng-if="invitation.status=='invited'" ng-click="main.rejectInvitation(invitation)">Reject</button>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+       </div>
+
+   </div>
+
+</div>
+
+
+
+<style>
+    nav{
+        border-bottom: 1px solid #C8C8C8 ;
+    }
+    .profileBody{
+        background-color: #f5f5f5;
+        padding-top: 7%;
+        padding-bottom: 7%;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+    .listing{
+        padding: 2%;
+        background-color: white;
+        box-shadow: 5px 5px 5px #d3d3d3;
+    }
+    .box{
+        box-shadow: 5px 5px 5px #d3d3d3;
+        background-color: white;
+    }
+    .notifications{
+        padding-top:5%;
+        padding-bottom: 5%;
+        padding: 3%;
+        box-shadow: 5px 5px 5px #d3d3d3;
+        background-color: white;
+    }
+    .transactions{
+        padding-top:5%;
+        padding-bottom: 5%;
+        padding: 3%;
+        box-shadow: 5px 5px 5px #d3d3d3;
+        background-color: white;
+    }
+    .box{
+        height: 100%;
+        width: 100%;
+        background-color: white;
+    }
+
+    .box-content{
+        text-align: center;  
+        padding-left: 15%;
+        padding-right: 15%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+    }
+    .img-circle{
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+    }
+
+    .buttonsignin{
+        width: 40%;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type="date"]:before {
+        content: attr(placeholder) !important;
+        color: #aaa;
+        margin-right: 0.5em;
+    }
+    input[type="date"]:focus:before,
+    input[type="date"]:valid:before {
+        content: "";
+    }
+    .check{
+        margin-top: 8px;
+    }
+
+</style>

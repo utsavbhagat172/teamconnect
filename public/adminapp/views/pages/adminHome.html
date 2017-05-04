@@ -1,0 +1,208 @@
+<br><br>
+<div ng-controller="UserController as userCtrl">
+	<div ng-init="userCtrl.getAdmin()">
+		<div class="container user">
+			<div class="row">
+				<div class="col-sm-2">
+					<img ng-if="userCtrl.admin.imgURL" src="{{userCtrl.admin.imgURL}}" width="80" alt="Profile of {{userCtrl.admin.name}}" />
+					
+					<img ng-if="!userCtrl.admin.imgURL" src="https://image.freepik.com/free-icon/user-male-shape-in-a-circle-ios-7-interface-symbol_318-35357.jpg" width="80" alt="Profile of {{userCtrl.admin.name}}" />
+				</div>
+				<div class="col-sm-4">
+					<b>{{userCtrl.admin.name}}</b>
+					<br>
+					<i>{{userCtrl.admin.accountStatus}} admin</i>
+					<br>
+					------------
+					<br>
+					<br>
+					<span>
+						<form>
+							<select name="New Status" ng-model="userCtrl.newstatus">
+								<option value="" disabled>Select New Status</option>
+								<option value="active">Enable</option>
+								<option value="disabled">Disbale</option>
+							</select>
+							<br><br>
+						</form>
+						<button class="btn btn-sm" ng-click="userCtrl.changeAdminStatus()">Update Status</button>&nbsp&nbsp&nbsp&nbsp&nbsp
+						<!-- <button class="btn btn-sm">Change Status</button> -->
+					</span>
+				</div>
+				<div class="col-sm-2">
+
+				</div>
+				<div class="col-sm-4">
+					<b>Email : </b> {{userCtrl.admin.email}}
+					<br><br>
+					<b>Contact No. : </b> {{userCtrl.admin.mobile}}
+					<br><br>
+					<b>Birthday : </b> {{userCtrl.admin.birthdate}}
+					<br><br>
+					<b>Gender : </b> {{userCtrl.admin.gender}}
+				</div>
+			</div>
+		</div>
+		<hr>
+
+		<!-- <div class="container">
+			<div class="row">
+				<div class="col-sm-2 user2">
+					<div style="font-size: 14px">
+						<h6 class="sectionHeading">Full Profile</h6><br>
+						<a ng-click="userCtrl.display='transactions'" href="">
+							<img src="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/OSXHIGuidelines/Art/AppStore8_2x.png" width="20" height="20" class="d-inline-block align-top" alt=""> Transactions
+						</a>
+						<br>
+						<a ng-click="userCtrl.display='queries'" href="">
+							<img src="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/OSXHIGuidelines/Art/AppStore8_2x.png" width="20" height="20" class="d-inline-block align-top" alt=""> Queries
+						</a>
+						<br>
+						<a ng-click="userCtrl.display='projects'" href="">	
+							<img src="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/OSXHIGuidelines/Art/AppStore8_2x.png" width="20" height="20" class="d-inline-block align-top" alt=""> Projects
+						</a>
+					</div>
+				</div>
+
+				<div class="col-sm-10 user3">
+					<div class="user2" ng-if="userCtrl.display=='transactions'">
+						<h6 class="sectionHeading">Transactions</h6><br>
+						
+					</div>
+
+
+					<div class="user2" ng-if="userCtrl.display=='queries'">
+						<h6 class="sectionHeading">Asked Queries</h6><br>
+						<div ng-init="userCtrl.getAskedQueries()">
+							<div ng-repeat="query in userCtrl.askedQueries">
+								<div class="row">
+									<div class="col-xs-1">
+										<img class="img-circle img-responsive" src="{{query.userIMG}}" width="48" height="48" class="d-inline-block align-top" alt="">
+									</div>
+									<div class="col-xs-11">
+										<div class="usernameFont"><b>{{query.name}}</b></div>
+										<div class="dateFont"><i>{{query.date}}</i></div>
+									</div>
+								</div>
+								<br>
+								<span class="titleFont"><b>{{query.title}}</b></span>
+								<br>
+								<span class="descriptionFont">
+									<p>
+										{{query.description}}
+									</p>
+								</span>
+								<hr>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="user2" ng-if="userCtrl.display=='projects'">
+						<h6 class="sectionHeading">Projects</h6><br>
+						<div ng-init="userCtrl.getReviews()">
+							<div ng-repeat="review in userCtrl.reviews">
+								<div class="row">
+									<div class="col-xs-1">
+										<img class="img-circle img-responsive" src="{{review.userIMG}}" width="48" height="48" class="d-inline-block align-top" alt="">
+									</div>
+									<div class="col-xs-9">
+										<div class="usernameFont"><b>{{review.name}}</b></div>
+										<div class="dateFont"><i>{{review.date}}</i></div>
+									</div>
+									<div class="col-xs-2">
+										----------
+									</div>
+								</div>
+								<br>
+								<span class="descriptionFont">
+									<p>
+										{{review.description}}
+									</p>
+								</span>
+								<hr>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div> -->
+	</div>
+</div>
+
+<style>
+
+
+	.img-circle{
+		border-radius: 50%;
+	}
+
+	.user{
+		background-color: #f5f5f5;
+		padding: 3%;
+		margin-bottom: 16px;
+		margin-top: 16px;
+	}
+
+	.user2{
+		background-color: #f5f5f5;
+		padding: 2%;
+		margin-bottom: 16px;
+		margin-top: 16px;
+	}
+
+	.user3{
+		padding-left: : 16px;
+		padding-right: 16px;
+	}
+
+	.skills{
+		margin-top: 10px;
+	}
+
+	.courses{
+		margin-top: 16px;
+	}
+
+	.certification{
+		margin-left: 24px;
+	}
+
+	.language{
+		position: relative;
+		width: 30%;
+	}
+
+
+	.usernameFont{
+
+	}
+	.dateFont{
+		font-size: 14px;
+		margin-top: -8px;
+	}
+	.titleFont{
+
+	}
+	.descriptionFont{
+
+	}
+
+
+	.dabba{
+		overflow-y: auto;
+		float: left;
+		height: 400px;
+		width: 20%;
+		border: 2px solid black;
+	}
+
+	.dabba1{
+		float: right;
+		overflow-y: auto;
+		height: 400px;
+		width: 80%;
+		border: 2px solid black;
+	}
+</style>

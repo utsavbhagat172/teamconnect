@@ -1,0 +1,200 @@
+<div ng-controller="UserController as userCtrl" class="profbody">
+	<div ng-init="userCtrl.getUser()">
+		<div ng-init="userCtrl.userid=main.user.id">
+			<div class="user">
+				<div class="row">
+					<div class="col-sm-3">
+						<img class="img-circle img-fluid" src="https://cdn0.iconfinder.com/data/icons/customers-and-service/512/12.png" alt="Card image cap" >
+					</div>
+					<div class="col-sm-5 empty0">
+						<h4>{{userCtrl.user.name}}</h4>
+						<br>
+						<i>{{userCtrl.user.designation}}</i>
+						<br>
+						<br>
+						<span>
+						{{userCtrl.user.accountStatus}} account.
+						<form>
+							<select name="New Status" ng-model="userCtrl.newstatus">
+								<option value="" disabled>Select New Status</option>
+								<option value="active">Enable</option>
+								<option value="disabled">Disable</option>
+							</select>
+							<br><br>
+						</form>
+						<button class="btn btn-sm" ng-click="userCtrl.changeUserStatus()">Update Status</button>&nbsp&nbsp&nbsp&nbsp&nbsp
+						<!-- <button class="btn btn-sm">Change Status</button> -->
+					</span>
+						
+					</div>
+					<div class="col-sm-4 empty">
+						<b>Email : </b> {{userCtrl.user.email}}
+						<br><br>
+						<b>Mobile : </b> {{userCtrl.user.mobile}}
+					</div>
+				</div>
+			</div>
+			<br>
+
+			<div class="row profilerow">
+				<div class="col-sm-2 user2">
+					<div style="font-size: 14px">
+						<h6 class="sectionHeading">Activity</h6><br>
+						<a ng-click="userCtrl.display='projects'" href="" class="profileview">
+							<img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" width="20" height="20" class="d-inline-block align-top" alt=""> Projects
+						</a>
+						<br><br>
+						<!-- <a ng-click="userCtrl.display='invites'" href="" class="profileview">
+							<img src="https://cdn3.iconfinder.com/data/icons/interface/100/help_question-512.png" width="20" height="20" class="d-inline-block align-top" alt=""> Invites
+						</a> -->
+					</div>
+				</div>
+
+				<div class="col-sm-10 user3">
+					<div class="user2" ng-if="userCtrl.display=='projects'">
+						<h6 class="sectionHeading">Projects</h6><br>
+						<div>
+							<div ng-repeat="project in userCtrl.user.projects">
+								<div class="row">
+									
+									<div class="col-xs-12">
+										<div class="usernameFont"><b><i>{{project.title}}</i></b></div>
+										<div class="descriptionFont">{{project.description}}</div>
+										<br>
+										<i>{{project.status}}</i>
+										<p class="dateFont">{{project.created_at | amDateFormat: 'D MMMM, YYYY,  hh:mm a'}}</p>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="user2" ng-if="userCtrl.display=='invites'">
+						<h6 class="sectionHeading">Invites</h6><br>
+						<div>
+							<div ng-repeat="invite in userCtrl.user.invites">
+								<div class="row">
+									
+									<div class="col-xs-12">
+										<div class="usernameFont"><b><i>{{invite.role}}</i></b></div>
+										<div class="descriptionFont">{{invite.project}}</div>
+										<br>
+										<i>{{invite.status}}</i>
+										<p class="dateFont">{{invite.created_at | amDateFormat: 'D MMMM, YYYY,  hh:mm a'}}</p>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<style>
+
+	.profbody{
+		background-color: #f5f5f5;
+		padding: 5%;
+	}
+
+	.img-circle{
+		border-radius: 50%;
+	}
+	.sendquery{
+		padding: 5%;
+		height: 100%;
+		width: 100%;
+	}
+	.sendquery1{
+		min-width: 500px;
+	}
+	.schedule{
+		padding: 5%;
+		height: 100%;
+		width: 100%;
+	}
+	.schedule1{
+		width: 300px;
+	}
+
+	.user{
+		background-color: white;
+		padding: 3%;
+		margin-bottom: 16px;
+		margin-top: 16px;
+		box-shadow: 5px 5px 5px #d3d3d3;
+	}
+	.empty0{
+		border-right:1px solid #d3d3d3;
+	}
+	.empty{
+		line-height: 30px;
+	}
+
+	.user2{
+		padding: 2%;
+		background-color: white;
+		box-shadow: 5px 5px 5px #d3d3d3;
+	}
+
+	.user3{
+		padding-left: : 16px;
+		padding-right: 16px;
+	}
+	.profilerow{
+		margin-left: 0;
+	}
+
+	.profileview{
+		color: black;
+		text-decoration:none;
+	}
+	.profileview:focus{
+		color: black;
+		text-decoration:none;
+	}
+	.profileview:hover{
+		color: black;
+		text-decoration:none;
+	}
+	.areas{
+		margin-top: 10px;
+	}
+
+	.courses{
+		margin-top: 16px;
+	}
+
+	.certification{
+		margin-left: 24px;
+	}
+
+	.language{
+		position: relative;
+		width: 30%;
+	}
+
+	
+	.usernameFont{
+
+	}
+	.dateFont{
+		font-size: 14px;
+		margin-top: -8px;
+	}
+	.titleFont{
+
+	}
+	.descriptionFont{
+
+	}
+
+
+}
+</style>

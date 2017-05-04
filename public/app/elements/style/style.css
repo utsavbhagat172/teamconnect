@@ -1,0 +1,25 @@
+nav{
+	border-bottom: 1px solid black;
+}
+
+nav.navbar{
+	padding-left: 10%;
+	padding-right:10%;
+}
+footer{
+		background-color: black;
+		padding-top: 3%;
+		padding-bottom: 3%;
+		padding-left: 10%;
+		padding-right: 10%;
+	}
+	.footerlinks{
+		color: white;
+	}
+	.footer{
+		text-align: center;
+	}
+	.footer-hr{
+		border-color: #373a3c;
+	}
+

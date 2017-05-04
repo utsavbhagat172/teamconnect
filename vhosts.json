@@ -1,0 +1,14 @@
+[
+  {
+    "domain": "localhost",
+    "path": "/public/app"
+  },
+  {
+    "domain": "admin.localhost",
+    "path": "/public/adminapp"
+  },
+  {
+    "domain": "faculty.localhost",
+    "path": "/public/facultyapp"
+  }
+]

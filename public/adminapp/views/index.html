@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html ng-app="AdminApp">
+<head>
+	<base href='/'>
+	<title>TeamConnect</title>
+
+ <!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+
+ 
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script type="text/javascript" src="https://code.angularjs.org/1.5.8/angular-route.min.js"></script>
+
+
+	<!-- Services -->
+	<script type="text/javascript" src="services/authService.js"></script>
+	<script type="text/javascript" src="services/userService.js"></script>
+	<script type="text/javascript" src="services/facultyService.js"></script>
+	<script type="text/javascript" src="services/questionService.js"></script>
+	<script type="text/javascript" src="services/chatService.js"></script>
+	<script type="text/javascript" src="services/profileService.js"></script>
+	<script type="text/javascript" src="services/projectService.js"></script>
+
+	<!-- Controllers -->
+	<script type="text/javascript" src="controllers/mainCtrl.js"></script>
+	<script type="text/javascript" src="controllers/userCtrl.js"></script>
+	<script type="text/javascript" src="controllers/facultyCtrl.js"></script>
+	<script type="text/javascript" src="controllers/questionCtrl.js"></script>
+	<script type="text/javascript" src="controllers/chatCtrl.js"></script>
+	<script type="text/javascript" src="controllers/profileCtrl.js"></script>
+	<script type="text/javascript" src="controllers/projectCtrl.js"></script>
+	
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+	<!-- Directives -->
+	<script type="text/javascript" src="directives/ngScrollBottom.js"></script>
+
+	<script
+	src="https://code.jquery.com/jquery-3.1.1.js"
+	integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+	crossorigin="anonymous"></script>
+
+ <!-- Compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.0.1/angular-moment.min.js"></script>
+
+	
+
+	<script type="text/javascript" src="app.routes.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+
+</head>
+<body ng-controller="MainController as main">
+	<header>
+		<nav class="navbar navbar-fixed-top navbar-light bg-faded" style="padding-left: 10%; padding-right: 10%; background-color: white; padding-top: 0;padding-bottom: 0;">
+			<a class="navbar-brand" href="/">
+<!-- 				<img src="/icons/consulto-icons/Logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+ -->				TeamConnect
+			</a>
+			<button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" style="float: right;"></button>
+
+
+			<div class="collapse navbar-toggleable-md float-lg-right" id="navbarResponsive">
+
+				<ul class="nav navbar-nav">
+					<li ng-if="main.loggedIn" class="nav-item">
+						<div class="dropdown">
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" aria-haspopup="true" aria-expanded="false">{{main.user.username}}</a>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+								<a class="dropdown-item" href="/profile">Profile</a>
+								<a class="dropdown-item" href="#" ng-click="main.doLogout()">Logout</a>
+							</div>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<div ng-view class="bodyngview"></div>
+
+
+	
+	<footer>
+
+		<div class="row footerlinks">
+			<div class="col-sm-3">
+				<h3>TeamConnect.</h3>
+			</div>
+			<div class="col-sm-6">
+				<div class="row footer">
+					<div class="col-sm-3">
+						About Us
+					</div>
+					<div class="col-sm-3">
+						Contact Us
+					</div>
+					<div class="col-sm-3">
+						Forum
+					</div>
+					<div class="col-sm-3">
+						Experts
+					</div>
+				</div>		
+			</div>
+			<div class="col-sm-3">
+				<div class="row">
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid">
+					</div>
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid">
+					</div>
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid">
+					</div>
+					<div class="col-sm-3">
+						<img src="http://musexpo.net/MUSEXPO_EU_2016/images/FB-icon-white.png" class="img-fluid"> 
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<hr class="footer-hr">
+		<br><br>
+		<div class="row">
+			<div class="col-sm-6">
+				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+			</div>
+			<div class="col-sm-2">
+
+			</div>
+			<div class="col-sm-2">
+				Privacy Policy
+			</div>
+			<div class="col-sm-2">
+				Terms and Conditions
+			</div>
+		</div>	
+
+	</footer>
+
+
+
+</body>
+<style>
+
+	nav.navbar{
+		padding-left: 10%;
+		padding-right: 10%;
+		background-color: white; 
+		padding-top: 0;
+		padding-bottom: 0; 
+		border-bottom: 1px solid black;
+	}
+
+	.navbar-nav > .nav-item{
+		padding-left:24px; padding-right: 24px;
+	}
+
+	footer{
+		background-color: black;
+		padding-top: 3%;
+		padding-bottom: 3%;
+		padding-left: 10%;
+		padding-right: 10%;
+	}
+	.footerlinks{
+		color: white;
+	}
+	.footer{
+		text-align: center;
+	}
+	.footer-hr{
+		border-color: #373a3c;
+	}
+
+
+
+</style>
+</html>

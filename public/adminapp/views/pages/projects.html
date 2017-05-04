@@ -1,0 +1,263 @@
+<div class="forumbody" ng-controller="ProjectController as projCtrl">
+    <div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="box">
+                    <h6 class="sectionHeading"><b>Service Areas</b></h6><br>
+                    <br>
+                    <h6>Generic</h6>
+                    <div class="row" ng-repeat="area in projCtrl.serviceareas">
+                        <div class="checkbox checkbox-default" ng-if="area.category=='Generic'">
+                            <input id="checkbox{{area}}" class="styled" type="checkbox" ng-model="area.on" ng-change="checkChange()">
+                            <label for="checkbox{{area}}">
+                                {{area.servicearea}}
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <h6>Expert</h6>
+                    <div class="row" ng-repeat="area in projCtrl.serviceareas">
+                        <div class="checkbox checkbox-default" ng-if="area.category=='Expert'">
+                            <input id="checkbox{{area}}" class="styled" type="checkbox" ng-model="area.on" ng-change="checkChange()">
+                            <label for="checkbox{{area}}">
+                                {{area.servicearea}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>      
+
+            <div class="col-sm-9">
+                <span class="s"><input name="search" id="search" type="search" ng-model="filter_name" placeholder="Search"></span>
+                <span class="filter">Sort: <span ng-click="projCtrl.sort('created_at')"><a href="#"> New </a> | </span><span ng-click="projCtrl.sort('popular')"><a href="#"> Popular</a> | </span><span ng-click="projCtrl.sort('interested_professionals.length')"><a href="#"> Interests </a></span></span>
+                <br><br>
+                <div ng-show="!filteredItems.length" style="text-align:center">
+                    <img src="../icons/consulto-icons/ring.gif" style="margin-left:33px;"><br><br><br>
+                    No results found.
+                    <br>
+                    <div ng-show="!main.loggedIn" style="margin-top:16px; text-align: center; ">
+                        <a class="btn btn-primary btn-sm " ng-click="displayNotify('login')"> Ask Question</a>
+                    </div>
+                    <div ng-show="main.loggedIn" style="margin-top:16px; text-align: center; ">
+                        <a class="btn btn-primary btn-sm " href="/new_question"> Ask Question</a>
+                    </div>
+                </div>
+
+                <div class="row querybody"  ng-repeat="project in filteredItems  = (projCtrl.projects | filter: filter_name | filter: serviceFilter | filter: typeFilter  | orderBy:sortKey:reverse) track by $index"  >
+                    <div class="col-sm-1">
+                        <img ng-if="project.user.imgURL" src="{{project.user.imgURL}}" class="img-circle">
+                        <img ng-if="!project.user.imgURL" src="../icons/consulto-icons/user.png" class="img-circle">
+                    </div>
+                    <div class="col-sm-11">
+                        <span ng-if="!project.anonymous"><b>{{project.user.name}}</b></span>
+                        <span ng-if="project.anonymous"><b>Anonymous</b></span> 
+                        <span class="rightheart">
+                            <img ng-click="projCtrl.addProject(project._id)" ng-if="!project.statusbyadmin" src="../icons/consulto-icons/heart.png">
+                            <img ng-click="projCtrl.removeProject(project._id)" ng-if="project.statusbyadmin" src="../icons/consulto-icons/heartred-01.png">
+                        </span>
+                        <div class="small">{{project.created_at | amDateFormat: 'D MMMM, YYYY,  hh:mm a'}}</div>
+                        <br>
+                        <h5>{{project.title}}</h5>
+                        <div class="small description">
+                            {{project.description}}
+                        </div>
+                        <span  ng-repeat="area in project.service_areas" >
+                            <button class="btn btn-secondary btn-xs" disabled>{{area}}</button>&nbsp
+                        </span>
+                        <br><br>
+                        <button class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseExample{{project._id}}" aria-expanded="false" aria-controls="collapseExample" alt="toggle here">{{project.interested_professionals.length}} Interests</button>
+                        <br>
+                        <br>
+                        <div class="collapse" id="collapseExample{{project._id}}" ng-if="project.interested_professionals.length!=0">
+                            <div class="answerbox">
+                                <div class="row" ng-repeat="prof in project.interested_professionals">
+                                    <div class="col-sm-1">
+                                        <img ng-if="!prof.imgURL" src="https://cdn0.iconfinder.com/data/icons/customers-and-service/512/13.png" class="img-circle">
+                                        <img ng-if="prof.imgURL" src="{{prof.imgURL}}" class="img-circle">
+                                    </div>
+                                    <div class="col-sm-11">
+                                        <a ng-href="/professionalHome/{{ prof._id}}" target="_blank"><b>{{prof.name}}</b></a>
+                                        <br>
+                                        <div>
+                                            Connect with professional for further development.
+                                        </div>
+                                        <br><hr>
+                                    </div>
+
+                                </div> 
+                            </div>   
+                        </div>
+                        <hr>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<style>
+
+    .sectionHeading {
+        font-weight: 300;
+        display: inline-block;
+        padding-bottom: 5px;
+        position: relative;
+        color: grey;
+        margin: 0 auto;
+    }
+    .sectionHeading:before{
+        content: "";
+        position: absolute;
+        width: 64%;
+        height: 1px;
+        bottom: 0;
+        left: 0%;
+        border-bottom: 2px solid #6699cc;
+    }
+
+
+    .btn-xs {
+        padding: 2px 4px;
+        font-size: 12px;
+        border-radius: 10px;
+    }
+    .form-check{
+        margin-bottom: 3px;
+    }
+    .form-check-input{
+        margin-top: 7px;
+    }
+    .form-check-text{
+        font-size: 15px;
+        padding: 0;
+        margin: 0;
+    }
+    .forumbody{
+        padding: 5%;
+        background-color: #fafafa;
+    }
+    .rightheart > img{
+        float: right;
+        height: 25px;
+        width: 25px;
+    }
+
+    .box{
+        width: 100%;
+        height: 100%;
+        border-right: 1px solid #c8c8c8;
+    }
+    .answerbox{
+        width: 100%;
+        height: 100%;
+        border: 1px solid #C8C8C8;
+        padding: 4%;
+    }
+
+    nav{
+        border-bottom: 1px solid #C8C8C8 ;
+    }
+
+    label.form-check-label {
+        font-size: 12px;
+        word-wrap:break-word
+    }
+    .filter{
+        float: right;
+        font-size: 12px; 
+    }
+    [type="checkbox"]
+    {
+        vertical-align:middle;
+        height:10px;
+    }
+
+    .img-circle{
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+    .small{
+        font-size: 12px;
+    }
+    .description{
+        margin-bottom: 10px;
+    }
+    input[type="search"] {
+      display: block;
+      margin: 0;
+      width: 100%;
+      font-family: sans-serif;
+      font-size: 18px;
+      appearance: none;
+      box-shadow: none;
+      border-radius: none;
+  }
+  input[type="search"]:focus {
+      outline: none;
+  }
+  input[type="search"] {
+      padding: 10px;
+      border: solid 1px #dcdcdc;
+      transition: box-shadow 0.3s, border 0.3s;
+  }
+  input[type="search"]:focus,
+  input[type="search"].focus {
+      border: solid 1px #707070;
+      box-shadow: 0 0 5px 1px #969696;
+  }
+
+  .review{
+    padding: 5%;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+.review1{
+    width: 300px;
+}
+
+.user-rating {
+    direction: rtl;
+    font-size: 16px;
+    unicode-bidi: bidi-override;
+    padding-left: 30px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-align: center;
+    display: inline-block;
+}
+.user-rating input {
+    opacity: 0;
+    position: relative;
+    left: -15px;
+    z-index: 2;
+    cursor: pointer;
+}
+.user-rating span.star:before {
+    color: #777777;
+    content:"ï€†";
+    /*padding-right: 5px;*/
+}
+.user-rating span.star {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    position: relative;
+    z-index: 1;
+}
+.user-rating span {
+    margin-left: -15px;
+}
+.user-rating span.star:before {
+    color: #777777;
+    content:"\f006";
+    /*padding-right: 5px;*/
+}
+.user-rating input:hover + span.star:before, .user-rating input:hover + span.star ~ span.star:before, .user-rating input:checked + span.star:before, .user-rating input:checked + span.star ~ span.star:before {
+    color: rgb(28,82,163);
+    content:"\f005";
+}
+
+</style>

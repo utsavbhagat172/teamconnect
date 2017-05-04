@@ -1,0 +1,242 @@
+<div class="profileBody">
+
+
+    <div class="row" ng-controller="UserUpdateController as userCtrl">
+        <div class="col-sm-2 listing">
+            <div style="font-size: 14px">
+                <h6 class="sectionHeading">{{main.user.name}}</h6><br>
+                <a ng-click="userCtrl.display='info'" href="" class="profileview">
+                    <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" width="20" height="20" class="d-inline-block align-top" alt=""> Personal Info
+                </a>
+                <!-- <br><br>
+                <a ng-click="userCtrl.display='notifications'" href="" class="profileview">
+                    <img src="https://cdn3.iconfinder.com/data/icons/interface/100/help_question-512.png" width="20" height="20" class="d-inline-block align-top" alt=""> Notifications
+                </a>
+                <br><br>
+                <a ng-click="userCtrl.display='transactions'" href="" class="profileview">    
+                    <img src="https://cdn4.iconfinder.com/data/icons/miu/24/circle-edit-pen-pencil-outline-stroke-128.png" width="20" height="20" class="d-inline-block align-top" alt=""> Transactions
+                </a> -->
+            </div>
+        </div>
+
+        <div class="col-sm-10">
+            <div class="box" ng-if="userCtrl.display=='info'">
+
+                <!-- Tab panes -->
+                <div>
+                <div class="box-content" id="Signup" ng-init="userCtrl.userData=main.user" ng-if="!userCtrl.processing">
+
+                        <h3>Update Your Profile</h3><br>
+                        <img ng-if="main.user.imgURL" src="{{main.user.imgURL}}" class="img-circle">
+                        <img ng-if="!main.user.imgURL" src="https://encrypted-tbn3.gstatic.comimages?q=tbn:ANd9GcR6OH1aRUVQgESweKUuaTJwCREgd4Z-5g7FQb15KFLO2M9xKeGo" class="img-circle"><br>
+                        <form enctype="multipart/form-data" class="form-sigin" ng-submit="userCtrl.updateProfilePicture()">
+                            <input type="file" name="file" file-model = "userCtrl.newFile" class="form-control">
+                            <button type="submit" class="btn btn-sm">Update Profile Picture</button>
+                        </form>
+                        <br>
+                        <form>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+
+                                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Name" ng-model="userCtrl.userData.name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Mobile Number" ng-model="userCtrl.userData.mobile" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="form-group">
+
+                                        <input type="email" class="form-control" id="formGroupExampleInput2" placeholder="Email" ng-model="userCtrl.userData.email" disabled>
+                                    </div>
+                                </div>  
+                            </div>
+
+                            <!-- <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <i ng-model="userCtrl.userData.birthdate">{{userCtrl.userData.birthdate | amDateFormat: 'DD MMMM, YYYY'}}</i>
+                                        <input type="date" class="form-control" id="exampleInputEmail3" placeholder="DOB" ng-model="userCtrl.newbirthdate">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12 check"><br>
+                                    <label class="form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" ng-model="userCtrl.userData.gender" value="male"> Male
+                                    </label>
+                                    <label class="form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" ng-model="userCtrl.userData.gender" id="inlineRadio2" value="female"> Female
+                                    </label>
+                                </div>
+                            </div> -->
+                            <br>
+                            <button class="btn btn-info buttonsignin" ng-click="userCtrl.updateUser()">Update</button><br>
+                        </form>
+
+                    </div>
+                    <div ng-if="userCtrl.processing">
+                        <img src="../icons/consulto-icons/ring.gif">
+                    </div>
+                </div>
+            </div>
+            <!-- <div ng-if="userCtrl.display=='notifications'" class="notifications" ng-init="main.getNotifications()">
+                <div ng-repeat="notification in main.usernotifications">
+                    <div ng-if="notification.reftag=='question'" ng-click="main.readNotification(notification)">
+                        <a ng-href="/{{notification.reftag}}/{{notification.question._id}}" target="_blank">
+                            <div ng-if="!notification.status" ng-click="main.readNotification(notification)">Mark as Read
+                            </div>
+                            {{notification.message}} by {{notification.user.name}}. 
+                            <br>
+                            <i>{{notification.created_at | amDateFormat : 'D MMMM, YYYY,  hh:mm a'}}
+                            </i>
+                        </a>
+                    </div>
+                    <div ng-if="notification.reftag=='project'" ng-click="main.readNotification(notification)">
+                        <a ng-href="/{{notification.reftag}}/{{notification.project._id}}" target="_blank" >
+                            <div ng-if="!notification.status" ng-click="main.readNotification(notification)">Mark as Read
+                            </div>
+                            {{notification.message}} by {{notification.user.name}}. 
+                            <br>
+                            <i>{{notification.created_at | amDateFormat : 'D MMMM, YYYY,  hh:mm a'}}
+                            </i>
+                        </a>
+                    </div>
+                    <div ng-if="notification.reftag=='appointment'" ng-click="main.readNotification(notification)">
+                        <a ng-href="/appointments" target="_blank" >
+                            <div ng-if="!notification.status" ng-click="main.readNotification(notification)">Mark as Read
+                            </div>
+                            {{notification.message}} by {{notification.user.name}}. 
+                            <br>
+                            <i>{{notification.created_at | amDateFormat : 'D MMMM, YYYY,  hh:mm a'}}
+                            </i>
+                        </a>
+                    </div>
+                    <div ng-if="notification.reftag=='admin'" ng-click="main.readNotification(notification)">
+                        <div ng-if="!notification.status" ng-click="main.readNotification(notification)">Mark as Read
+                        </div>
+                        {{notification.message}} by {{notification.user.name}}. 
+                        <br>
+                        <i>{{notification.created_at | amDateFormat : 'D MMMM, YYYY,  hh:mm a'}}
+                        </i>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div ng-if="userCtrl.display=='transactions'" class="transactions">
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+               If the collapsible element is closed by default, it should have a value of aria-expanded="false".
+               <hr>
+           </div> -->
+       </div>
+
+   </div>
+
+</div>
+
+
+
+<style>
+    nav{
+        border-bottom: 1px solid #C8C8C8 ;
+    }
+    .profileBody{
+        background-color: #f5f5f5;
+        padding-top: 7%;
+        padding-bottom: 7%;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+    .listing{
+        padding: 2%;
+        background-color: white;
+        box-shadow: 5px 5px 5px #d3d3d3;
+    }
+    .box{
+        box-shadow: 5px 5px 5px #d3d3d3;
+        background-color: white;
+    }
+    .notifications{
+        padding-top:5%;
+        padding-bottom: 5%;
+        padding: 3%;
+        box-shadow: 5px 5px 5px #d3d3d3;
+        background-color: white;
+    }
+    .transactions{
+        padding-top:5%;
+        padding-bottom: 5%;
+        padding: 3%;
+        box-shadow: 5px 5px 5px #d3d3d3;
+        background-color: white;
+    }
+    .box{
+        height: 100%;
+        width: 100%;
+        background-color: white;
+    }
+
+    .box-content{
+        text-align: center;  
+        padding-left: 15%;
+        padding-right: 15%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+    }
+    .img-circle{
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+    }
+
+    .buttonsignin{
+        width: 40%;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type="date"]:before {
+        content: attr(placeholder) !important;
+        color: #aaa;
+        margin-right: 0.5em;
+    }
+    input[type="date"]:focus:before,
+    input[type="date"]:valid:before {
+        content: "";
+    }
+    .check{
+        margin-top: 8px;
+    }
+
+</style>
