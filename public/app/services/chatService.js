@@ -70,7 +70,11 @@ angular.module('chatService', [])
 		})
 	}
 
-
+	chatFactory.getProjectFiles = function(projectid){
+		return $http.post('/api/getProjectFiles', {
+			projectid: projectid
+		})
+	}
 
 	return chatFactory;
 

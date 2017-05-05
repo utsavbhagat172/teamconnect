@@ -28,12 +28,12 @@ mongoose.connect(config.database, function(err){
 });
 
 
-app.use(bodyParser.urlencoded({ extended:true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '50mb', extended:true }));
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(morgan('dev'));
 
 
-//app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 var virtualHosts = JSON.parse(fs.readFileSync('vhosts.json', 'utf8'));
 virtualHosts.forEach(function(virtualHost) {

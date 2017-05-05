@@ -33,6 +33,12 @@
 		*/
 
 	}
+	.schedule{
+		border-left:1px solid #c0c0c0;
+		padding: 2%;
+		overflow-y: auto;
+		font-size: 14px;
+	}
 	.chatsmessages{
 		overflow-y: scroll;
 	}
@@ -100,10 +106,27 @@
 
 
 				<br>
-				<h3>Private</h3>
-				<div class="list" ng-repeat="chat in chatCtrl.chats">
-					<a href="" class="nodecoration" ng-if="!chat.name" ng-click="chatCtrl.getChat(chat._id)"><p>{{chat.name}}</p></a>
-					<!-- <a href="" class="yesdecoration"><p class="yesdecoration">Teamconnect</p></a> -->
+				<div ng-if="chatCtrl.selectedChat">
+					<div ng-if="chatCtrl.selectedChat">
+						<h3>Members:</h3>
+						<br>
+						<b>Students</b>
+						<br>
+						<div ng-repeat="student in chatCtrl.selectedChat.users">
+							<p ng-click="chatCtrl.selectPrivateChatStudent(chatCtrl.selectedChat.project._id, student)" >{{student.name}}</p>
+						</div>
+						<br>
+						<b>Faculties</b>
+						<br>
+						<div ng-repeat="faculty in chatCtrl.selectedChat.faculties">
+							<p ng-click="chatCtrl.selectPrivateChatFaculty(chatCtrl.selectedChat.project._id, faculty)" >{{faculty.name}}</p>
+						</div>
+					</div>
+					<br>
+					Files:
+					<div ng-repeat="file in chatCtrl.selectedChat.files">
+						<a href="{{file.path}}" target="_blank">{{file.title}}</a><br>
+					</div>
 				</div>
 			</div>
 			
@@ -112,12 +135,11 @@
 			<div class="chatsmessages row" id="style-4" ng-repeat="message in chatCtrl.selectedChat.messages | orderBy:'created_at'">
 				<div class="col-sm-1">
 					<img ng-if="message.sender.imgURL" src="{{message.sender.imgURL}}" class="userimage">
-					<img ng-if="!message.sender.imgURL" src="https://thumbs.dreamstime.com/z/cartoon-professor-vector-illustration-30463505.jpg" class="userimage">
+					<img ng-if="!message.sender.imgURL" src="http://pngimages.net/sites/default/files/user-png-image-15189.png" class="userimage">
 				</div>
 				<div class="col-sm-11">
-					<b>{{message.sender.name}}</b>, {{message.created_at | amDateFormat: 'h:mm a , MMMM Do YYYY'}}
-					<br>
-					{{message.message}}
+					<h6><b>{{message.sender.name}}</b> <span style="font-size: 12px;font-weight:lighter;">{{message.created_at | date:'EEEE, MMMM d, y @ h:mm:ssa'}}</span></h6>
+					<div style="margin-bottom: 1%;">{{message.message}}</div>
 				</div>
 			</div>
 			<br>
@@ -129,13 +151,15 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-3" ng-if="chatCtrl.selectedChat">
+		<div class="col-sm-3 schedule" ng-if="chatCtrl.selectedChat">
 			<div ng-if="chatCtrl.selectedChat.project">
-				<h5>{{chatCtrl.selectedChat.project.title}}</h5>
-				<p>{{chatCtrl.selectedChat.project.description}}</p>
-			</div>		
+				<b>Project Name :</b>{{chatCtrl.selectedChat.project.title}}
+				<br>
+				<b>Project Description :</b>{{chatCtrl.selectedChat.project.description}}
+			</div>
+			<hr>		
 			<a class="btn btn-primary" data-toggle="collapse" href="" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-				Invite
+				Invite student/faculty
 			</a>
 			<div class="collapse" id="collapseExample">
 				<div class="card card-block"  style="padding: 2%;">
@@ -159,6 +183,7 @@
 					</form>
 				</div>
 			</div>
+			<hr>
 			<!-- <div>
 				<button class="btn" data-toggle="collapse" data-target="#shcedule" aria-expanded="false" aria-controls="collapseExample">Schedule Appointment</button>
 				<br>
@@ -170,20 +195,25 @@
 					</div>
 				</div>
 			</div> -->
-			<div ng-repeat="appointment in chatCtrl.selectedChat.appointmentData">
-				{{appointment.title}}
-				<br>
-				<div ng-if="!appointment.status">
-					<button class="btn btn-sm" ng-if="appointment.updated_by!='faculty'" ng-click="chatCtrl.approveAppointment(appointment._id)">Accept</button>
+			<h6><u><b>Appointments</b></u></h6>
+			<div style="position: fixed;height: 50%;width:250px;overflow-y: scroll;" id="style-4">
+				<div ng-repeat="appointment in chatCtrl.selectedChat.appointmentData">
+					<h6><b>{{$index+1}}.{{appointment.title}}</b></h6>
+					{{appointment.schedule | amDateFormat: 'h:mm a , MMMM Do YYYY'}}
+					<div ng-if="appointment.status"><u>Status</u>-Confirmed</div>
+					<div ng-if="!appointment.status"><u>Status</u>-Pending</div>
 					<br>
-					<button class="btn btn-sm" data-toggle="collapse" data-target="#reshcedule" aria-expanded="false" aria-controls="collapseExample" ng-if="appointment.updated_by!='faculty'">Reschedule Appointment</button>	
-					<br>
-					<div class="collapse" id="reshcedule">
-						<div class="card card-block">
-							<input class="form-control" type="datetime-local" ng-model="chatCtrl.newschedule">
-							<button class="btn btn-primary" ng-click="chatCtrl.rescheduleAppointment(appointment._id)">ReSchedule</button>
-						</div>
-					</div>			
+					<div ng-if="!appointment.status">
+						<button class="btn btn-sm" ng-if="appointment.updated_by!='faculty'" ng-click="chatCtrl.approveAppointment(appointment._id)">Accept</button>
+						<button class="btn btn-sm" data-toggle="collapse" data-target="#reshcedule" aria-expanded="false" aria-controls="collapseExample" ng-if="appointment.updated_by!='faculty'">Reschedule Appointment</button>	
+						<br>
+						<div class="collapse" id="reshcedule">
+							<div class="card card-block">
+								<input class="form-control" type="datetime-local" ng-model="chatCtrl.newschedule">
+								<button class="btn btn-primary" ng-click="chatCtrl.rescheduleAppointment(appointment._id)">ReSchedule</button>
+							</div>
+						</div>			
+					</div>
 				</div>
 			</div>
 		</div>

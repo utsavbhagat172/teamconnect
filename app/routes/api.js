@@ -11,7 +11,7 @@ var Appointment = require('../models/appointment');
 var Project = require('../models/project');
 var random = require("random-js")(); // uses the nativeMath engine
 var msg91=require('msg91-sms');
-
+var File = require('../models/file');
 
 var config = require('../../config/config');
 var secretKey = config.secretKey;
@@ -33,6 +33,23 @@ var transporter = nodemailer.createTransport("SMTP",{
 		pass: "teamconnectlnm"
 	}
 });
+
+var fs = require('fs');
+
+var S3FS = require('s3fs');
+var uuid = require('uuid');
+
+
+var s3fsImpI = new S3FS('lnmteamconnect-1',{
+
+	accessKeyId : 'AKIAIIGUOS7GYYZ4UFUQ',
+	secretAccessKey: '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'
+});
+
+s3fsImpI.create();
+
+var multiparty = require('connect-multiparty'),
+multipartyMiddleware = multiparty();
 
 // CREATE USER TOKEN
 function createUserToken(user){
@@ -210,7 +227,50 @@ nev.generateTempUserModel(User, function(err, tempUserModel) {
 module.exports = function(app, express, io){
 
 	var api = express.Router();
+	api.use(multipartyMiddleware);
 
+
+	api.post('/file-upload',function(req, res, buf){
+
+	var file = req.files.file;
+	var pid = '590b6c9b2f14fb70067afdd1';
+	console.log(file,'=========================================', pid)
+     // multiparty is what allows the file to to be accessed in the req
+     var stream = fs.createReadStream(file.path);
+     var extension = file.path.substring(file.path.lastIndexOf('.'));
+     var destPath = '/' + uuid.v4() + extension;
+
+     var base = 'https://console.aws.amazon.com/s3/buckets/lnmteamconnect-1';
+     s3fsImpI.writeFile(destPath, stream, {ContentType: file.type}).then(function(one){
+     	console.log(destPath)
+     	fs.unlink(file.path);
+     	var newfile = new File({
+     		path: 'https://s3.amazonaws.com/lnmteamconnect-1'+destPath,
+     		project: pid,
+     		title: file.name
+     	})
+     	newfile.save(function(err, file) {
+     		if(err){
+     			res.send(err)
+     		}
+     		else{
+     			res.redirect('/')
+     		}
+     	})
+        //res.send(base + destPath); 
+    });
+ });
+
+api.post('/getProjectFiles', function(req, res){
+	File.find({"project":req.body.projectid}, function(err, files){
+		if(err){
+			res.send(err);
+		}
+		else{
+			res.json(files);
+		}
+	})
+})
 
 //===================================================SIGNUP AND LOGIN USER===================================================	
 api.post('/signupuser', function(req, res) {
@@ -859,7 +919,7 @@ api.post('/create_appointment', function(req, res){
 			res.send(err);
 			return;
 		}
-		io.emit('appointment', appointment)
+		io.emit('appointment_'+req.body.projectid, appointment)
 		res.json('created')	
 	});
 })
@@ -981,7 +1041,7 @@ api.post('/project_invite', function(req,res){
 				from: '"TeamConnect" <lnm.teamconnect@gmail.com>',
 				to: invite.email,
 				subject: 'Project Invitation',
-				text: 'Please click on the link to proceed. TeamConnect',
+				text: 'Please click on the link (http://localhost:8080/) to proceed. TeamConnect',
 				html: '<b>Please click on the link to proceed. </b> <a href="http://localhost:8080/"TeamConnect</a>'
 			};
 
@@ -1208,21 +1268,15 @@ api.post('/project_get', function(req, res){
 //==================================================CHAT CHAT CHAT==========================================================
 
 api.post('/start_conversation', function(req,res){
-	console.log(req.body.newconv)
+
 	var students = req.body.newconv.users;
 	var faculties = req.body.newconv.faculties;
-/*	var array = students.split(",");
-	var array2 = faculties.split(",");*/
 	var chat = new Chat({
 		name: 		req.body.newconv.chatname,
-		project: 	req.body.newconv.projectid
+		project: 	req.body.newconv.project,
+		users: 		students,
+		faculties: 	faculties
 	});
-	students.forEach(function(element){
-		chat.users.push(element);
-	})
-	faculties.forEach(function(element){
-		chat.faculties.push(element);
-	})
 	chat.save(function(err, newChat){
 		if(err){
 			return;

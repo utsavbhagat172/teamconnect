@@ -1,10 +1,14 @@
+body{
+	font-family: 'Open Sans', sans-serif;
+}
 nav{
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid #c0c0c0;
 }
 
 nav.navbar{
 	padding-left: 10%;
 	padding-right:10%;
+	background-color: white;
 }
 footer{
 		background-color: black;

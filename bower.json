@@ -1,0 +1,21 @@
+{
+  "name": "teamconnect",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "teamconnect"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/utsavbhagat172/teamconnect",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-async-series": "^1.0.0",
+    "async": "^2.4.0"
+  }
+}

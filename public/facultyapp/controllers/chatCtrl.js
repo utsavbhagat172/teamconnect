@@ -6,6 +6,7 @@ angular.module('chatCtrl', ['chatService'])
 	var vm = this;
 	vm.newMessage="";
 	vm.newschedule="";
+	vm.newconv={};
 	Auth.getUser()
 	.success(function(data) {
 		vm.user = data;
@@ -34,14 +35,19 @@ angular.module('chatCtrl', ['chatService'])
 		Chat.getChat(chatid).success(function(data){
 			Chat.getAppointment(data.project._id).success(function(appointmentData){
 				data.appointmentData = appointmentData;
-				vm.selectChat(data);
+				Chat.getProjectFiles(data.project._id).success(function(files){
+					data.files=files;
+					vm.selectChat(data);
+				})
 			})
 		})
 	}
 
 	vm.selectChat = function(chat){
 		vm.selectedChat = chat;
-		console.log(vm.selectedChat,'hello');
+		socketio.on('appointment_'+chat.project._id, function(data) {
+			vm.selectedChat.appointmentData.push(data);
+		})
 	}
 
 	vm.sendMessage = function(){
@@ -72,48 +78,122 @@ angular.module('chatCtrl', ['chatService'])
 		})
 	}
 
-	vm.selectPrivateChatStudent = function(user, user2){
-		angular.forEach(vm.chats, function(e){
-			if(e.name === '' && e.users.indexOf(user2) > -1){
-				//open chat
-				vm.selectedChat = e;
-				$scope.$apply();
+	vm.selectPrivateChatStudent = function(project, user2){
+		Auth.getUser()
+		.then(function(data) {
+			if(!data.data.imgURL){
+				data.data.imgURL='https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png';
 			}
-			else{
-				vm.newconv.users=[];
-				vm.newconv.faculties=[];
-				vm.newconv.faculties.push(user);
-				vm.newconv.users.push(user2);
-				Chat.createNewChat(vm.newconv).success(function(data){
-					vm.chats.push(data);
-					vm.newconv = {};
-					vm.selectedChat = data;
-					$scope.$apply();
-				})
-			}
-		})
+			var user = data.data;
+
+			var flag = 0;
+			var pchat = {};
+			var keepgoing = true;
+			console.log(user,user2);
+			var chatcount = vm.chats.length;			
+			angular.forEach(vm.chats, function(e){
+				console.log(e)
+				console.log('chatCount: ', chatcount--);
+				console.log(keepgoing, vm.selectedChat.project.title,'--------', e.project, project);
+				var nos = e.users.length;
+				var nof = e.faculties.length;
+				console.log(nos, nof)
+				console.log(e.users.indexOf(user.id), e.faculties.indexOf(user2._id))
+
+				if(keepgoing && e.name!=vm.selectedChat.project.title && e.project == project){
+					console.log('1111111111111111111')
+					if(nos == 2 && nof == 0){
+						if(e.users.indexOf(user.id) == 0  && e.faculties.indexOf(user2._id) == 0){
+							console.log('flagggggggggggggggggggg')
+							flag = 1;
+							pchat = e;
+							console.log(flag)
+							console.log(pchat)
+							keepgoing = false;
+							vm.getChat(e._id)
+							console.log(vm.selectedChat)
+						}
+					}
+				}
+				console.log('final',flag)
+				if(flag==0 && chatcount == 0){
+					console.log('create new conv')
+					vm.newconv.users=[];
+					vm.newconv.faculties=[];
+					vm.newconv.project = project;
+					vm.newconv.faculties.push(user.id);
+					vm.newconv.users.push(user2._id);
+					Chat.createNewChat(vm.newconv).success(function(data){
+						console.log(data)
+						data.faculties = [user];
+						data.users = [user2];
+						vm.chats.push(data);
+						vm.newconv = {};
+						vm.getChat(data._id)
+					})
+				}
+			})
+			
+		});
 	}
 
-	vm.selectPrivateChatFaculty = function(user, user2){
-		angular.forEach(vm.chats, function(e){
-			if(e.name === '' && e.faculties.indexOf(user2) > -1){
-				//open chat
-				vm.selectedChat = e;
-				$scope.$apply();
+
+	vm.selectPrivateChatFaculty = function(project, user2){
+		Auth.getUser()
+		.then(function(data) {
+			if(!data.data.imgURL){
+				data.data.imgURL='https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png';
 			}
-			else{
-				vm.newconv.users=[];
-				vm.newconv.faculties=[];
-				vm.newconv.faculties.push(user);
-				vm.newconv.faculties.push(user2);
-				Chat.createNewChat(vm.newconv).success(function(data){
-					vm.chats.push(data);
-					vm.newconv = {};
-					vm.selectedChat = data;
-					$scope.$apply();
-				})
-			}
-		})
+			var user = data.data;
+
+			var flag = 0;
+			var pchat = {};
+			var keepgoing = true;
+			console.log(user,user2);
+			var chatcount = vm.chats.length;			
+			angular.forEach(vm.chats, function(e){
+				console.log(e)
+				console.log('chatCount: ', chatcount--);
+				console.log(keepgoing, e.project.title,'--------', e.project, project);
+				var nos = e.users.length;
+				var nof = e.faculties.length;
+				console.log(nos, nof)
+				console.log(e.users.indexOf(user.id), e.faculties.indexOf(user2._id))
+
+				if(keepgoing && e.name!=vm.selectedChat.project.title && e.project == project){
+					console.log('1111111111111111111')
+					if(nos == 1 && nof == 1){
+						if(e.users.indexOf(user.id) == 0  && e.faculties.indexOf(user2._id) == 0){
+							console.log('flagggggggggggggggggggg')
+							flag = 1;
+							pchat = e;
+							console.log(flag)
+							console.log(pchat)
+							keepgoing = false;
+							vm.getChat(e._id)
+							console.log(vm.selectedChat)
+						}
+					}
+				}
+				console.log('final',flag)
+				if(flag==0 && chatcount == 0){
+					console.log('create new conv')
+					vm.newconv.users=[];
+					vm.newconv.faculties=[];
+					vm.newconv.project = project;
+					vm.newconv.faculties.push(user.id);
+					vm.newconv.faculties.push(user2._id);
+					Chat.createNewChat(vm.newconv).success(function(data){
+						console.log(data)
+						data.faculties = [user, user2];
+						vm.chats.push(data);
+						vm.newconv = {};
+						vm.getChat(data._id)
+					})
+				}
+			})
+			
+		});
 	}
 
 });
